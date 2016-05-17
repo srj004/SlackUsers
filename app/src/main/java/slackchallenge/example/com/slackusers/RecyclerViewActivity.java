@@ -1,54 +1,85 @@
 package slackchallenge.example.com.slackusers;
 
 /**
- * Created by Sahil on 5/14/2016.
+ * Launch of application, sets Recycler View
  */
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewActivity extends Activity implements SlackAPICall.AsyncResponse {
 
+    private final String PREF_KEY = "jsondata";
+    public SharedPreferences sharedPreferences;
+    public  SharedPreferences.Editor sharedPreferencesEditor;
+
     private List<Person> persons;
     private RecyclerView rv;
-    SlackAPICall s = null;
+    private SlackAPICall slackAPICall = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.my_recycler_view);
 
-        rv = (RecyclerView)findViewById(R.id.recycler_view);
+        // Set up references to SharedPreferences
+        sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferencesEditor = sharedPreferences.edit();
 
+        // Set up Recycler View
+        rv = (RecyclerView)findViewById(R.id.recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        rv.setHasFixedSize(true);
+        rv.setHasFixedSize(true); // All the views are the same size
 
+        // Get Data (calls the network, or uses SharedPreferences)
         initializeData();
-        //initializeAdapter();
     }
 
-    // Call the API and get the data
-    private void initializeData(){
-        persons = new ArrayList<>();
-        Log.e("JSON_TRIAL", "BEFORE CALL");
 
-        s = new SlackAPICall(this);
-        s.execute();
+     private void initializeData() {
 
+         Log.e("Cold Start", "Start");
+         persons = new ArrayList<>();
+         slackAPICall = new SlackAPICall(this);
+
+         String jsonStr = sharedPreferences.getString(PREF_KEY, "EMPTY");
+
+         Log.e("Cold Start", "JSONStr: " + jsonStr);
+
+         if (!jsonStr.equals("EMPTY")) {
+
+             Log.e("Cold Start", "FOUND");
+             gsonCallAndPostProcessing(jsonStr);
+
+         } else {
+
+             Log.e("Cold Start", "NETWORK");
+             slackAPICall.execute();
+         }
+     }
+
+
+    private void gsonCallAndPostProcessing(String jsonStr) {
+        Gson gson = new Gson();
+        SlackAPICall.Response r = gson.fromJson(jsonStr, SlackAPICall.Response.class);
+        slackAPICall.setResponseObject(r);
+        processFinish();
     }
 
+    private void setSharedPreferenceData(String data) {
+        sharedPreferencesEditor.putString(PREF_KEY, data);
+        sharedPreferencesEditor.apply();
+    }
 
     private void initializeAdapter() {
         RVAdapter adapter = new RVAdapter(persons, this);
@@ -58,30 +89,26 @@ public class RecyclerViewActivity extends Activity implements SlackAPICall.Async
     @Override
     public void processFinish() {
 
-        Log.e("JSON_TRIAL", "AFTER CALL");
-        for(SlackAPICall.Members m : s.getMembers()) {
-            Person p = new Person( m.name,
-                                   m.profile.title,
-                                   m.profile.email,
-                                   m.profile.image,
-                                   m.profile.phone,
-                                   m.id,
-                                   m.userName,
-                                   m.color);
+        Log.e("Cold Start", "Setting String to: " + slackAPICall.getResponseJSONString());
+        // Set the shared preferences for cold start
+        String responseStr = slackAPICall.getResponseJSONString();
+        if(responseStr != null) {
+            setSharedPreferenceData(responseStr);
+        }
+
+        for (SlackAPICall.Members m : slackAPICall.getMembers()) {
+            Person p = new Person(m.name,
+                    m.profile.title,
+                    m.profile.email,
+                    m.profile.image,
+                    m.profile.phone,
+                    m.id,
+                    m.userName,
+                    m.color);
+            // Add to the user list
             persons.add(p);
-            Log.e("JSON_TRIAL", "Added new person");
         }
 
         initializeAdapter();
     }
 }
-
-
-     /*SlackAPICall s = new SlackAPICall(new SlackAPICall.AsyncResponse(){
-            @Override
-            public void processFinish(Void output) {
-
-            }
-        }).execute();*/
-
-//new SlackAPICall().execute();

@@ -5,16 +5,13 @@ package slackchallenge.example.com.slackusers;
 // api client auth
 // name.monkey
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -27,9 +24,15 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Sahil on 5/14/2016.
+ * SlackAPICall in charge of network call to get user list
  */
 public class SlackAPICall extends AsyncTask<Void, Void, Void> {
+
+    private static final String baseUserAPIUrl = "https://slack.com/api/users.list";
+    private static final String authToken = "token=xoxp-5048173296-5048487710-19045732087-b5427e3b46";
+
+    private String responseStr = null;
+    private Response httpResponse = null;
 
     private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -58,18 +61,16 @@ public class SlackAPICall extends AsyncTask<Void, Void, Void> {
         return request.execute();
     }
 
-
     private String getUserDataJSONThroughHttp() {
-        String apiUrl = "https://slack.com/api/users.list";
-        String token = "token=xoxp-5048173296-5048487710-19045732087-b5427e3b46";
-        StringBuilder builder = new StringBuilder(apiUrl)
+
+        // Build the RESTful URL for HTTP Request
+        StringBuilder builder = new StringBuilder(baseUserAPIUrl)
                 .append("?")
-                .append(token);
+                .append(authToken);
 
         com.google.api.client.http.HttpResponse response = null;
         String res = null;
         try {
-
             response = run(builder.toString());
             res = response.parseAsString();
 
@@ -77,55 +78,18 @@ public class SlackAPICall extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
-        return res;  //.parseAs(UsersInfoResponse.class);
-    }
-
-    String responseStr = null;
-
-    String jsonData =
-            "{" + "\"ok\":true," +
-                    "\"members\" :" +
-                "[{ " +
-                    "\"id\":\"1\"," +
-                    "\"team_id\":\"2\"," +
-                    "\"name\":\"amy\"," +
-                    "\"deleted\":false," +
-                    "\"status\":null, " +
-                    "\"color\":\"684b6c\"," +
-                    "\"real_name\":\"Amy Adams\"," +
-                    "\"tz\":\"America Los_Angeles\"," +
-                    "\"tz_label\":\"Pacific Daylight Time\"," +
-                    "\"profile\":{" +
-                        "\"title\":\"Marketing\"," +
-                        "\"phone\":\"415-5559463\"," +
-                        "\"real_name\":\"Amy Adams\"," +
-                        "\"real_name_normalized\":\"Amy Adams\","+
-                        "\"email\":\"steve+ae1_7@slack-corp.com\"" +
-                    "}," +
-                    "\"is_admin\":false" +
-                "}]}";
-
-    Response response = null;
-
-    public List<Members> getMembers() {
-        return response.getMembers();
+        return res;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
 
-        String jsonResponse = getUserDataJSONThroughHttp(); //jsonData;
-
-        Log.e("JSON_TRIAL STRING", jsonResponse);
+        // Call server and get json data
+        String jsonResponse = getUserDataJSONThroughHttp();
 
         Gson gson = new Gson();
-        response = gson.fromJson(jsonResponse, Response.class);
-        responseStr = gson.toJson(response);
-
-        for(Members m: response.getMembers()) {
-            Log.e("JSON_TRIAL THIS", m.name);
-        }
-        Log.e("JSON_TRIAL", responseStr);
+        httpResponse = gson.fromJson(jsonResponse, Response.class);
+        responseStr = gson.toJson(httpResponse);
 
         return null;
     }
@@ -134,6 +98,18 @@ public class SlackAPICall extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         Log.e("JSON_TRIAL", "HERE ON_POST");
         delegate.processFinish();
+    }
+
+    public List<Members> getMembers() {
+        return httpResponse.getMembers();
+    }
+
+    public String getResponseJSONString() {
+        return responseStr;
+    }
+
+    public void setResponseObject(Response r) {
+        httpResponse = r;
     }
 
     public interface AsyncResponse {
@@ -189,5 +165,4 @@ Other paramaters: is_owner, is_admin, deleted (false, true)
         @SerializedName("image_192")
         String image;
     }
-
 }

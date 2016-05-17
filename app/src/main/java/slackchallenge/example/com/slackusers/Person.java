@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sahil on 5/14/2016.
+ * Person POJO
  */
 class Person {
     String name;
@@ -26,6 +26,6 @@ class Person {
         this.phoneNumber = phoneNumber;
         this.userId = userId;
         this.userName = userName;
-        this.colorCode = hexColor;//Integer.parseInt(hexColor, 16);
+        this.colorCode = hexColor;
     }
 }

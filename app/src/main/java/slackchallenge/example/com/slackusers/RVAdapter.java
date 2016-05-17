@@ -1,30 +1,25 @@
 package slackchallenge.example.com.slackusers;
 
 /**
- * Created by Sahil on 5/14/2016.
+ * RVAdapter for applying data to the recycle view items
  */
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
-
 
     List<Person> persons;
     Context context;
