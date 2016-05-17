@@ -146,6 +146,9 @@ Other paramaters: is_owner, is_admin, deleted (false, true)
 
         @SerializedName("profile")
         Profile profile;
+
+        @SerializedName("is_admin")
+        Boolean isAdmin;
     }
 
     class Profile

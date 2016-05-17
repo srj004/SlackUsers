@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -36,15 +37,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         TextView personName;
         TextView personTitle;
         TextView personUserName;
+        ImageView personAdmin;
+        TextView personAdminText;
 
         //Detailed View
         CardView cv_d;
         ImageView personPhoto_d;
+        ImageView personAdmin_d;
         TextView personName_d;
         TextView personTitle_d;
         TextView personUserName_d;
         TextView personEmail_d;
         TextView personNumber_d;
+
 
         public PersonViewHolder(View itemView, final View v_detail) {
             super(itemView);
@@ -53,10 +58,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             personTitle = (TextView)itemView.findViewById(R.id.person_title);
             personUserName = (TextView) itemView.findViewById(R.id.person_userName);
             personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            personAdmin = (ImageView) itemView.findViewById(R.id.person_adimin);
+            personAdminText = (TextView) itemView.findViewById(R.id.person_admin_text);
+
 
             //Detailed
             cv_d = (CardView) v_detail.findViewById(R.id.cv_detail);
             personPhoto_d = (ImageView)v_detail.findViewById(R.id.person_photo_detail);
+            personAdmin_d = (ImageView)v_detail.findViewById(R.id.person_adimin_detail);
             personName_d = (TextView)v_detail.findViewById(R.id.person_name_detail);
             personTitle_d = (TextView) v_detail.findViewById(R.id.person_title_detail);
             personUserName_d = (TextView) v_detail.findViewById(R.id.person_userName_detail);
@@ -113,10 +122,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
         Person person = persons.get(i);
 
+        // Initial Card View
         personViewHolder.personName.setText(person.name);
         personViewHolder.personTitle.setText(person.title);
         personViewHolder.personUserName.setText("User Name: " + person.userName
-                                        + " (" + person.userId + ")");
+                + " (" + person.userId + ")");
 
         Log.e("IMAGE: ", person.photoURL);
         // Set the image
@@ -125,6 +135,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 .load(person.photoURL)
                 .placeholder(R.drawable.img_placeholder_avatar)
                 .into(imageView);
+
+        //Log.e("IS ADMIN: ", person.name + " " + person.isAdmin);
+        if( person.isAdmin ) {
+            personViewHolder.personAdmin.setVisibility(View.VISIBLE);
+            personViewHolder.personAdminText.setVisibility(View.VISIBLE);
+        } else {
+            personViewHolder.personAdmin.setVisibility(View.GONE);
+            personViewHolder.personAdminText.setVisibility(View.GONE);
+        }
 
         // Detail views update:
         personViewHolder.personName_d.setText(person.name);
@@ -139,10 +158,16 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         personViewHolder.personTitle_d.setText(person.title);
         personViewHolder.personNumber_d.setText(person.phoneNumber);
         personViewHolder.personUserName_d.setText("User Name: " + person.userName
-                                    + " (" + person.userId + ")");
+                + " (" + person.userId + ")");
 
-        personViewHolder.cv_d.setBackgroundColor(Color.parseColor("#" + person.colorCode));
-        personViewHolder.cv.setBackgroundColor( Color.parseColor("#" + person.colorCode) );
+        if( person.isAdmin ) {
+            personViewHolder.personAdmin_d.setVisibility(View.VISIBLE);
+        } else {
+            personViewHolder.personAdmin_d.setVisibility(View.GONE);
+        }
+
+        personViewHolder.cv_d.setCardBackgroundColor(Color.parseColor("#" + person.colorCode));
+        personViewHolder.cv.setCardBackgroundColor( Color.parseColor("#" + person.colorCode) );
 
     }
 

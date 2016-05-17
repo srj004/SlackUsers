@@ -3,15 +3,15 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="10dp"
+    android:background="@color/transparentBalck"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cv"
-        card_view:cardElevation="10dp"
         card_view:cardCornerRadius="10dp"
-        card_view:cardBackgroundColor="@color/cardview_light_background"
         >
 
         <RelativeLayout
@@ -54,6 +54,32 @@
                 android:layout_toRightOf="@+id/person_photo"
                 android:layout_below="@+id/person_title"
                 android:textSize="15sp"
+                />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/person_adimin"
+                android:src="@drawable/ic_supervisor_account_black_24dp"
+                android:layout_toRightOf="@+id/person_photo"
+                android:layout_below="@+id/person_userName"
+                android:layout_alignBottom="@+id/person_photo"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/person_admin_text"
+                android:text="@string/admin_str"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/person_adimin"
+                android:layout_alignTop="@+id/person_adimin"
+                android:layout_alignBottom="@+id/person_adimin"
+                android:gravity="center"
+                android:layout_marginLeft="3dp"
+                android:textSize="15sp"
+                android:visibility="gone"
                 />
 
         </RelativeLayout>

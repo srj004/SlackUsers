@@ -15,10 +15,11 @@ class Person {
     String userId;
     String userName;
     String colorCode;
+    Boolean isAdmin;
 
     Person(String name, String title, String email,
            String photoURL, String phoneNumber,
-           String userId, String userName, String hexColor) {
+           String userId, String userName, String hexColor, Boolean isAdmin) {
         this.name = name;
         this.title = title;
         this.email = email;
@@ -27,5 +28,6 @@ class Person {
         this.userId = userId;
         this.userName = userName;
         this.colorCode = hexColor;
+        this.isAdmin = isAdmin;
     }
 }
