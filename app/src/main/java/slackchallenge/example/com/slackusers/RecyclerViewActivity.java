@@ -56,7 +56,7 @@ public class RecyclerViewActivity extends Activity implements SlackAPICall.Async
 
          Log.e("Cold Start", "JSONStr: " + jsonStr);
 
-         /*if (!jsonStr.equals("EMPTY")) {
+         if (!jsonStr.equals("EMPTY")) {
 
              Log.e("Cold Start", "FOUND");
              gsonCallAndPostProcessing(jsonStr);
@@ -65,9 +65,7 @@ public class RecyclerViewActivity extends Activity implements SlackAPICall.Async
 
              Log.e("Cold Start", "NETWORK");
              slackAPICall.execute();
-         }*/
-
-         slackAPICall.execute();
+         }
      }
 
 

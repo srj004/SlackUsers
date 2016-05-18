@@ -82,6 +82,16 @@
                 android:visibility="gone"
                 />
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/more_icon"
+                android:src="@drawable/ic_more_horiz_black_24dp"
+                android:layout_toRightOf="@+id/person_photo"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="130dp"
+                />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
