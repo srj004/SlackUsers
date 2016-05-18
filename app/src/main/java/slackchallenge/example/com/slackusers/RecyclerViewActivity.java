@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -45,29 +44,21 @@ public class RecyclerViewActivity extends Activity implements SlackAPICall.Async
         initializeData();
     }
 
-
      private void initializeData() {
-
-         Log.e("Cold Start", "Start");
+         //Log.e("Cold Start", "Start");
          persons = new ArrayList<>();
          slackAPICall = new SlackAPICall(this);
 
          String jsonStr = sharedPreferences.getString(PREF_KEY, "EMPTY");
-
-         Log.e("Cold Start", "JSONStr: " + jsonStr);
-
+         //Log.e("Cold Start", "JSONStr: " + jsonStr);
          if (!jsonStr.equals("EMPTY")) {
-
-             Log.e("Cold Start", "FOUND");
+             //Log.e("Cold Start", "FOUND");
              gsonCallAndPostProcessing(jsonStr);
-
          } else {
-
-             Log.e("Cold Start", "NETWORK");
+             //Log.e("Cold Start", "NETWORK");
              slackAPICall.execute();
          }
      }
-
 
     private void gsonCallAndPostProcessing(String jsonStr) {
         Gson gson = new Gson();
@@ -89,7 +80,7 @@ public class RecyclerViewActivity extends Activity implements SlackAPICall.Async
     @Override
     public void processFinish() {
 
-        Log.e("Cold Start", "Setting String to: " + slackAPICall.getResponseJSONString());
+        //Log.e("Cold Start", "Setting String to: " + slackAPICall.getResponseJSONString());
         // Set the shared preferences for cold start
         String responseStr = slackAPICall.getResponseJSONString();
         if(responseStr != null) {

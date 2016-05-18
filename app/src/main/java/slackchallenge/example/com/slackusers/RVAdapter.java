@@ -3,7 +3,6 @@ package slackchallenge.example.com.slackusers;
 /**
  * RVAdapter for applying data to the recycle view items
  */
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,12 +12,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -26,6 +23,7 @@ import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
 
+    // List of persons and context of the Recycler View Activity
     List<Person> persons;
     Context context;
 
@@ -35,7 +33,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     }
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
-
+        // Front card view
         CardView cv;
         ImageView personPhoto;
         TextView personName;
@@ -44,7 +42,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         ImageView personAdmin;
         TextView personAdminText;
 
-        //Detailed View
+        //Dialog Detailed View
         CardView cv_d;
         ImageView personPhoto_d;
         ImageView personAdmin_d;
@@ -53,7 +51,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         TextView personUserName_d;
         TextView personEmail_d;
         TextView personNumber_d;
-
 
         public PersonViewHolder(View itemView, final View v_detail) {
             super(itemView);
@@ -64,7 +61,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
             personAdmin = (ImageView) itemView.findViewById(R.id.person_adimin);
             personAdminText = (TextView) itemView.findViewById(R.id.person_admin_text);
-
 
             //Detailed
             cv_d = (CardView) v_detail.findViewById(R.id.cv_detail);
@@ -81,16 +77,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 public void onClick(final View view) {
 
                     // Show the Detailed User Dialog
-                    /*final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(), R.style.CustomDialog);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            ((ViewGroup) v_detail.getParent()).removeView(v_detail);
-                        }
-                    });
-                    builder.setView(v_detail);
-                    builder.show();*/
-
                     Dialog d = new Dialog(view.getContext(), R.style.CustomDialog);
                     d.setContentView(v_detail);
                     d.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -114,10 +100,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     }
 
     /*
-    This method is called when the custom ViewHolder needs to be initialized.
-    We specify the layout that each item of the RecyclerView should use.
-    This is done by inflating the layout using LayoutInflater,
-    passing the output to the constructor of the custom ViewHolder.
+        Description:
+        - This method is called when the custom ViewHolder needs to be initialized.
+        We specify the layout that each item of the RecyclerView should use.
+        This is done by inflating the layout using LayoutInflater,
+        passing the output to the constructor of the custom ViewHolder.
      */
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -135,25 +122,23 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     // Sets the data for the specific card view
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, int i) {
-
+        // Get current person
         Person person = persons.get(i);
 
          /*
-            Initial Card View:
+            Front Card View:
          */
         personViewHolder.personName.setText(person.name);
         personViewHolder.personTitle.setText(person.title);
         personViewHolder.personUserName.setText("User Name: " + person.userName
-                + " (" + person.userId + ")");
-
-        Log.e("IMAGE: ", person.photoURL);
+                + "\n(" + person.userId + ")");
         // Set the image
         ImageView imageView = personViewHolder.personPhoto;
         Picasso.with(context)
                 .load(person.photoURL)
                 .placeholder(R.drawable.img_placeholder_avatar)
                 .into(imageView);
-
+        // Set Admin image and text
         if( person.isAdmin ) {
             personViewHolder.personAdmin.setVisibility(View.VISIBLE);
             personViewHolder.personAdminText.setVisibility(View.VISIBLE);
@@ -161,21 +146,22 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             personViewHolder.personAdmin.setVisibility(View.GONE);
             personViewHolder.personAdminText.setVisibility(View.GONE);
         }
+        personViewHolder.cv.setCardBackgroundColor( Color.parseColor("#" + person.colorCode) );
 
         /*
             Detail views update:
          */
         personViewHolder.personName_d.setText(person.name);
         personViewHolder.personEmail_d.setText(person.email);
-
+        // Set image
         ImageView imageView_detail = personViewHolder.personPhoto_d;
         Picasso.with(context)
                 .load(person.photoURL)
                 .placeholder(R.drawable.img_placeholder_avatar)
                 .into(imageView_detail);
-
+        // Set title
         personViewHolder.personTitle_d.setText(person.title);
-
+        // Set phone number which is clickable to open Dial View
         final String phoneNumber = person.phoneNumber;
         personViewHolder.personNumber_d.setText(phoneNumber);
         personViewHolder.personNumber_d.setClickable(true);
@@ -188,19 +174,16 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 context.startActivity(intent);
             }
         });
-
+        // Username View
         personViewHolder.personUserName_d.setText("User Name: " + person.userName
-                + " (" + person.userId + ")");
-
+                + "\n(" + person.userId + ")");
+        // Admin View
         if( person.isAdmin ) {
             personViewHolder.personAdmin_d.setVisibility(View.VISIBLE);
         } else {
             personViewHolder.personAdmin_d.setVisibility(View.GONE);
         }
-
         personViewHolder.cv_d.setCardBackgroundColor(Color.parseColor("#" + person.colorCode));
-        personViewHolder.cv.setCardBackgroundColor( Color.parseColor("#" + person.colorCode) );
-
     }
 
     /*

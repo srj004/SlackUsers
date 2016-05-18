@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Person POJO
+ * Person POJO, representing the person data
  */
 class Person {
     String name;

@@ -2,4 +2,17 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="space_16dp">16dp</dimen>
     <dimen name="space_10dp">10dp</dimen>
+    <dimen name="space_30dp">30dp</dimen>
+    <dimen name="space_20dp">20dp</dimen>
+    <dimen name="margin_more_icon">130dp</dimen>
+
+    <dimen name="person_image_height">100dp</dimen>
+    <dimen name="person_image_width">100dp</dimen>
+
+    <dimen name="admin_image_height">30dp</dimen>
+    <dimen name="admin_image_width">30dp</dimen>
+
+    <dimen name="space_30sp">30sp</dimen>
+    <dimen name="space_15sp">15sp</dimen>
+    <dimen name="space_20sp">20sp</dimen>
 </resources>

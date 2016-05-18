@@ -11,23 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cv_detail"
-        card_view:cardElevation="10dp"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="@dimen/space_10dp"
+        card_view:cardCornerRadius="@dimen/space_10dp"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/space_16dp"
             >
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/person_image_width"
+                android:layout_height="@dimen/person_image_height"
                 android:id="@+id/person_photo_detail"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="@dimen/space_16dp"
                 />
 
             <TextView
@@ -36,22 +36,12 @@
                 android:id="@+id/person_name_detail"
                 android:layout_toRightOf="@+id/person_photo_detail"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:textSize="@dimen/space_30sp"
                 />
 
-            <!-- ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/person_adimin_detail"
-                android:src="@drawable/ic_supervisor_account_black_24dp"
-                android:layout_toRightOf="@+id/person_name_detail"
-                android:layout_alignBottom="@+id/person_name_detail"
-                android:layout_alignTop="@+id/person_name_detail"
-                android:visibility="gone"
-                /-->
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/admin_image_width"
+                android:layout_height="@dimen/admin_image_height"
                 android:id="@+id/person_adimin_detail"
                 android:src="@drawable/ic_supervisor_account_black_24dp"
                 android:layout_alignParentTop="true"
@@ -66,7 +56,7 @@
                 android:layout_toRightOf="@+id/person_photo_detail"
                 android:layout_below="@+id/person_name_detail"
                 android:layout_marginTop="5dp"
-                android:textSize="20sp"
+                android:textSize="@dimen/space_20sp"
                 />
 
             <TextView
@@ -76,7 +66,7 @@
                 android:layout_toRightOf="@+id/person_photo_detail"
                 android:layout_below="@+id/person_title_detail"
                 android:layout_marginTop="2dp"
-                android:textSize="20sp"
+                android:textSize="@dimen/space_20sp"
                 />
 
             <TextView
@@ -94,7 +84,7 @@
                 android:id="@+id/person_phone_detail"
                 android:layout_below="@+id/person_email_detail"
                 android:layout_marginTop="3dp"
-                android:textSize="20sp"
+                android:textSize="@dimen/space_20sp"
                 android:textColor="@color/LightBlue"
                 android:textStyle="bold"
                 />

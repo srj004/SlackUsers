@@ -6,7 +6,6 @@ package slackchallenge.example.com.slackusers;
 // name.monkey
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -96,7 +95,6 @@ public class SlackAPICall extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        Log.e("JSON_TRIAL", "HERE ON_POST");
         delegate.processFinish();
     }
 
