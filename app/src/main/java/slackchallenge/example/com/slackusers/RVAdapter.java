@@ -4,9 +4,13 @@ package slackchallenge.example.com.slackusers;
  * RVAdapter for applying data to the recycle view items
  */
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -77,7 +81,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 public void onClick(final View view) {
 
                     // Show the Detailed User Dialog
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    /*final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(), R.style.CustomDialog);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
@@ -85,7 +89,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                         }
                     });
                     builder.setView(v_detail);
-                    builder.show();
+                    builder.show();*/
+
+                    Dialog d = new Dialog(view.getContext(), R.style.CustomDialog);
+                    d.setContentView(v_detail);
+                    d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            ((ViewGroup) v_detail.getParent()).removeView(v_detail);
+                        }
+                    });
+                    d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    d.show();
+
                 }
             });
         }
@@ -122,7 +138,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
         Person person = persons.get(i);
 
-        // Initial Card View
+         /*
+            Initial Card View:
+         */
         personViewHolder.personName.setText(person.name);
         personViewHolder.personTitle.setText(person.title);
         personViewHolder.personUserName.setText("User Name: " + person.userName
@@ -136,7 +154,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 .placeholder(R.drawable.img_placeholder_avatar)
                 .into(imageView);
 
-        //Log.e("IS ADMIN: ", person.name + " " + person.isAdmin);
         if( person.isAdmin ) {
             personViewHolder.personAdmin.setVisibility(View.VISIBLE);
             personViewHolder.personAdminText.setVisibility(View.VISIBLE);
@@ -145,7 +162,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
             personViewHolder.personAdminText.setVisibility(View.GONE);
         }
 
-        // Detail views update:
+        /*
+            Detail views update:
+         */
         personViewHolder.personName_d.setText(person.name);
         personViewHolder.personEmail_d.setText(person.email);
 
@@ -156,7 +175,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
                 .into(imageView_detail);
 
         personViewHolder.personTitle_d.setText(person.title);
-        personViewHolder.personNumber_d.setText(person.phoneNumber);
+
+        final String phoneNumber = person.phoneNumber;
+        personViewHolder.personNumber_d.setText(phoneNumber);
+        personViewHolder.personNumber_d.setClickable(true);
+        personViewHolder.personNumber_d.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open up dialer and insert phone number
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                context.startActivity(intent);
+            }
+        });
+
         personViewHolder.personUserName_d.setText("User Name: " + person.userName
                 + " (" + person.userId + ")");
 
